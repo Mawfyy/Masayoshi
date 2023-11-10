@@ -1,0 +1,12 @@
+# features v1.0
+ - Implement spotify feature
+ - Implement lyrics feature
+ - Implement command to see current tracks
+ - Implement buttons in the current song
+ - Implement "Now playing {song_name}" event
+ - Implement personalizable status, deafen and mute
+ - Implement admin commands system
+ - formatting, testing, and linter CI/CD
+ - add unit testing
+ - Implement loop command
+ - Implement embeds fully rich commands
