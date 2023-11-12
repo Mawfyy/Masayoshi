@@ -1,6 +1,5 @@
 use dotenvy::var;
 use lavalink_rs::prelude::{QueueMessage, SearchEngines, TrackInQueue, TrackLoadData};
-use musixmatch::TrackSearchQuery;
 
 use crate::types::{Context, Error};
 
@@ -32,6 +31,7 @@ pub async fn disable_karaoke(ctx: Context<'_>) -> Result<(), Error> {
 }
 */
 
+/*
 #[poise::command(slash_command)]
 pub async fn lyrics(ctx: Context<'_>) -> Result<(), Error> {
     let guild = ctx.guild().unwrap();
@@ -49,8 +49,10 @@ pub async fn lyrics(ctx: Context<'_>) -> Result<(), Error> {
         Some(context) => {
             let current_song = context.get_player().await.unwrap();
             let title = current_song.track.unwrap().info.title.clone();
-            let track =
-                music_client.search_track(TrackSearchQuery::new().song_title(Some(title.as_str()))).await.unwrap();
+            let track = music_client
+                .search_track(TrackSearchQuery::new().song_title(Some(title.as_str())))
+                .await
+                .unwrap();
             let lyrics = track.name();
             println!("{:?}", lyrics);
             return Ok(());
@@ -62,6 +64,7 @@ pub async fn lyrics(ctx: Context<'_>) -> Result<(), Error> {
         }
     }
 }
+*/
 
 pub async fn join_bot(ctx: &Context<'_>) -> Result<(), Error> {
     let lava_client = ctx.data().lavalink.clone();
@@ -140,7 +143,7 @@ pub async fn play(ctx: Context<'_>, name: String) -> Result<(), Error> {
 
     if let Some(info) = playlist_info {
         ctx.say(format!(
-            "Added to queue: {} with position #{}",
+            "Added playlist {}  with {} tracks",
             info.name,
             tracks.len()
         ))
@@ -151,7 +154,7 @@ pub async fn play(ctx: Context<'_>, name: String) -> Result<(), Error> {
             "Added to queue: {} - {} with position #{}",
             track.info.author,
             track.info.title,
-            tracks.len() + 1
+            player.get_queue().await.unwrap().len()
         ))
         .await?;
     }
