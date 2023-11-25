@@ -7,6 +7,7 @@ First you need to download Lavalink-jar from [Lavalink](https://github.com/laval
 Later, set up the enviroment variables, look .env.example
 
 DISCORD_TOKEN for discord bot token
+
 LAVALINK_PASSWORD is the same password when you configure Lavalink server.
 
 ## Contribute
