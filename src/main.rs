@@ -7,7 +7,7 @@ use std::sync::Arc;
 use crate::types::Data;
 use dotenvy::var;
 use lavalink_rs::{model::events, prelude::*};
-use music::{leave, lyrics, ping, play, resume, skip, stop};
+use music::{leave, play, resume, skip, stop};
 use music_events::{ready_event, track_start};
 use poise::serenity_prelude::GatewayIntents;
 use poise::{Framework, FrameworkOptions};
@@ -16,12 +16,13 @@ use tokio::sync::Mutex;
 
 #[tokio::main]
 async fn main() {
+    let lavalink_password = var("LAVALINK_PASSWORD").expect("missing LAVALINK_PASSWORD value");
     let framework = Framework::builder()
         .options(FrameworkOptions {
-            commands: vec![play(), leave(), skip(), ping(), resume(), stop(), lyrics()],
+            commands: vec![play(), leave(), skip(), resume(), stop()],
             ..Default::default()
         })
-        .token(var("DISCORD_TOKEN").expect("missing DISCORD_TOKEN"))
+        .token(var("DISCORD_TOKEN").expect("missing DISCORD_TOKEN value"))
         .intents(GatewayIntents::all())
         .client_settings(|c| c.register_songbird())
         .setup(|ctx, _ready, framework| {
@@ -39,7 +40,7 @@ async fn main() {
                     hostname: "localhost:2333".to_string(),
                     is_ssl: false,
                     events: events::Events::default(),
-                    password: "Shinji".to_string(),
+                    password: lavalink_password.to_string(),
                     user_id: ctx.cache.current_user_id().into(),
                     session_id: None,
                 };
