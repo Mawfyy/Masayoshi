@@ -11,3 +11,11 @@ LAVALINK_PASSWORD is the same password when you configure Lavalink server.
 
 ## Contribute
 Pull requests are welcome, please open an issue if you wanna talk about a new feature or bug founded.
+
+## To-do
+ - [ ] loop command
+ - [ ] Improve events handling
+ - [ ] Improve performance
+
+## License
+This project is licensed under the [MIT license](https://choosealicense.com/licenses/mit/). Feel free to use and modify it according to your needs.

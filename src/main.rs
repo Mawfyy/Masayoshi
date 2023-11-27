@@ -2,12 +2,12 @@ mod music;
 mod music_events;
 mod types;
 
+use music::{leave::leave, play::play, resume::resume, skip::skip, stop::stop};
 use std::sync::Arc;
 
 use crate::types::Data;
 use dotenvy::var;
 use lavalink_rs::{model::events, prelude::*};
-use music::{leave, play, resume, skip, stop};
 use music_events::{ready_event, track_start};
 use poise::serenity_prelude::GatewayIntents;
 use poise::{Framework, FrameworkOptions};
