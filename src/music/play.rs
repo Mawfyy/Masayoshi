@@ -6,29 +6,23 @@ use crate::{
 };
 
 #[poise::command(slash_command)]
-pub async fn play(ctx: Context<'_>, name: String) -> CommandResult<()> {
-    let guild = ctx.guild().unwrap();
-    let guild_id = guild.id;
+pub async fn play(ctx: Context<'_>, name: String) -> CommandResult {
+    let guild_id = ctx.guild_id().unwrap();
     let lava_client = ctx.data().lavalink.clone();
     join_bot_vc(&ctx).await?;
 
     let player_context = lava_client.get_player_context(guild_id);
-
     let Some(player) = player_context else {
         ctx.say("The bot needs to join first in the voice channel")
             .await?;
         return Ok(());
     };
 
-    let query = if name.starts_with("http") {
-        name
-    } else if name.starts_with("https://open.spotify") {
-        SearchEngines::Spotify.to_query(&name)?
-    } else {
-        SearchEngines::YouTube.to_query(&name)?
-    };
+    let query = get_query(name);
 
     let loaded_tracks = lava_client.load_tracks(guild_id, &query).await?;
+
+    let total_tracks = player.get_queue().await.unwrap().len() + 1;
 
     let mut playlist_info = None;
 
@@ -44,24 +38,40 @@ pub async fn play(ctx: Context<'_>, name: String) -> CommandResult<()> {
 
     player.set_queue(QueueMessage::Append(tracks.clone().into()))?;
 
-    println!("{}", player.get_queue().await.unwrap().len());
-
     if let Some(info) = playlist_info {
-        ctx.say(format!(
-            "Added playlist {}  with {} tracks",
-            info.name,
-            tracks.len()
-        ))
+        ctx.send(|message| {
+            message
+                .content(format!(
+                    "Added playlist! with name {} and {} tracks",
+                    info.name,
+                    &tracks.len()
+                ))
+                .ephemeral(true)
+                .reply(false)
+        })
         .await?;
     } else {
         let track = &tracks[0].track;
-        ctx.say(format!(
-            "Added to queue: {} - {} with position #{}",
-            track.info.author,
-            track.info.title,
-            player.get_queue().await.unwrap().len() + 1
-        ))
+        ctx.send(|message| {
+            message
+                .content(format!(
+                    "Added to queue: {} - {} with position #{}",
+                    track.info.author, track.info.title, total_tracks
+                ))
+                .ephemeral(true)
+                .reply(false)
+        })
         .await?;
     }
     Ok(())
+}
+
+fn get_query(track: String) -> String {
+    if track.starts_with("http") {
+        track
+    } else if track.starts_with("https://open.spotify") {
+        SearchEngines::Spotify.to_query(&track).unwrap()
+    } else {
+        SearchEngines::YouTube.to_query(&track).unwrap()
+    }
 }

@@ -1,7 +1,7 @@
 use crate::types::{CommandResult, Context};
 
 #[poise::command(slash_command)]
-pub async fn skip(ctx: Context<'_>) -> CommandResult<()> {
+pub async fn skip(ctx: Context<'_>) -> CommandResult {
     let guild_id = ctx.guild_id().unwrap();
     let player_context = ctx.data().lavalink.clone().get_player_context(guild_id);
     let queue = player_context.clone().unwrap().get_queue().await.unwrap();

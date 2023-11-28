@@ -1,7 +1,7 @@
 use crate::types::{CommandResult, Context};
 
 #[poise::command(slash_command)]
-pub async fn stop(ctx: Context<'_>) -> CommandResult<()> {
+pub async fn stop(ctx: Context<'_>) -> CommandResult {
     let guild_id = ctx.guild_id().unwrap();
     let lava_client = ctx.data().lavalink.clone();
     let player_context = lava_client.get_player_context(guild_id);

@@ -6,7 +6,7 @@ pub mod stop;
 
 use crate::types::{CommandResult, Context};
 
-pub async fn join_bot_vc(ctx: &Context<'_>) -> CommandResult<()> {
+pub async fn join_bot_vc(ctx: &Context<'_>) -> CommandResult {
     let lava_client = ctx.data().lavalink.clone();
     let guild = ctx.guild().unwrap();
     let player_context = lava_client.get_player_context(guild.id);
