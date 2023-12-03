@@ -63,6 +63,11 @@ pub async fn play(ctx: Context<'_>, name: String) -> CommandResult {
         })
         .await?;
     }
+
+    if player.get_player().await.unwrap().track.is_none() {
+        player.skip()?;
+    }
+
     Ok(())
 }
 
