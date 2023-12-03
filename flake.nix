@@ -38,19 +38,21 @@
       # Development environment output
       devShells = forAllSystems ({ pkgs }: {
         default = pkgs.mkShell {
-          nativeBuildInputs = [ pkgs.pkg-config ];
-          buildInputs = [ pkgs.openssl ];
+          #nativeBuildInputs = [ pkgs.pkg-config ];
+          #buildInputs = [];
           #LD_LIBRARY_PATH = lib.makeLibararyPath [ pkgs.openssl ];
           # The Nix packages provided in the environment
           packages = (with pkgs; [
             rustc 
             cargo
+            pkg-config
             openssl
             jdk17
             clippy
             cmake
             rust-analyzer
             rustfmt
+            libopus
             rustToolchain
           ]) ++ pkgs.lib.optionals pkgs.stdenv.isDarwin (with pkgs; [ libiconv ]);
         };
