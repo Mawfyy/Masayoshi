@@ -14,9 +14,9 @@ LAVALINK_PASSWORD is the same password when you configure Lavalink server.
 Pull requests are welcome, please open an issue if you wanna talk about a new feature or bug founded.
 
 ## To-do
- - [ ] loop command
- - [ ] Improve events handling
- - [ ] Improve performance
+ - [ ] Loop, now playing, remove_from_position, commands
+ - [ ] Show what track is playing from events 
+ - [ ] lyrics support
 
 ## License
 This project is licensed under the [MIT license](https://choosealicense.com/licenses/mit/). Feel free to use and modify it according to your needs.
