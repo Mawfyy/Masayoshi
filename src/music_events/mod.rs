@@ -1,4 +1,3 @@
-use crate::types::Context;
 use hook::hook;
 use lavalink_rs::{model::events, prelude::*};
 
@@ -9,6 +8,6 @@ pub async fn ready_event(client: LavalinkClient, session_id: String, event: &eve
 }
 
 #[hook]
-pub async fn track_start(client: LavalinkClient, session_id: String, event: &events::TrackStart) {
+pub async fn track_start(_: LavalinkClient, _: String, _: &events::TrackStart) {
     println!("Track start");
 }
