@@ -1,4 +1,5 @@
 pub mod leave;
+pub mod now_playing;
 pub mod play;
 pub mod resume;
 pub mod skip;
