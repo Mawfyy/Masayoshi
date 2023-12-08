@@ -2,7 +2,9 @@ mod music;
 mod music_events;
 mod types;
 
-use music::{leave::leave, play::play, resume::resume, skip::skip, stop::stop};
+use music::{
+    leave::leave, now_playing::now_playing, play::play, resume::resume, skip::skip, stop::stop,
+};
 use std::sync::Arc;
 
 use crate::types::Data;
@@ -19,7 +21,7 @@ async fn main() {
     let lavalink_password = var("LAVALINK_PASSWORD").expect("missing LAVALINK_PASSWORD value");
     let framework = Framework::builder()
         .options(FrameworkOptions {
-            commands: vec![play(), leave(), skip(), resume(), stop()],
+            commands: vec![play(), leave(), skip(), resume(), stop(), now_playing()],
             ..Default::default()
         })
         .token(var("DISCORD_TOKEN").expect("missing DISCORD_TOKEN value"))
