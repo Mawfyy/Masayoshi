@@ -3,14 +3,20 @@ mod music_events;
 mod types;
 
 use music::{
-    leave::leave, now_playing::now_playing, play::play, resume::resume, skip::skip, stop::stop,
+    leave::leave,
+    now_playing::now_playing,
+    play::play,
+    r#loop::{disable_loop, enable_loop},
+    resume::resume,
+    skip::skip,
+    stop::stop,
 };
 use std::sync::Arc;
 
 use crate::types::Data;
 use dotenvy::var;
 use lavalink_rs::{model::events, prelude::*};
-use music_events::{ready_event, track_start};
+use music_events::{ready_event, track_end, track_start};
 use poise::serenity_prelude::GatewayIntents;
 use poise::{Framework, FrameworkOptions};
 use songbird::SerenityInit;
@@ -21,7 +27,16 @@ async fn main() {
     let lavalink_password = var("LAVALINK_PASSWORD").expect("missing LAVALINK_PASSWORD value");
     let framework = Framework::builder()
         .options(FrameworkOptions {
-            commands: vec![play(), leave(), skip(), resume(), stop(), now_playing()],
+            commands: vec![
+                play(),
+                leave(),
+                skip(),
+                resume(),
+                stop(),
+                now_playing(),
+                enable_loop(),
+                disable_loop(),
+            ],
             ..Default::default()
         })
         .token(var("DISCORD_TOKEN").expect("missing DISCORD_TOKEN value"))
@@ -33,6 +48,7 @@ async fn main() {
                 let events = events::Events {
                     ready: Some(ready_event),
                     track_start: Some(track_start),
+                    track_end: Some(track_end),
                     ..Default::default()
                 };
 

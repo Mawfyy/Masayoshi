@@ -1,4 +1,5 @@
 pub mod leave;
+pub mod r#loop;
 pub mod now_playing;
 pub mod play;
 pub mod resume;
