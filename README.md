@@ -14,7 +14,10 @@ LAVALINK_PASSWORD is the same password when you configure Lavalink server.
 Pull requests are welcome, please open an issue if you wanna talk about a new feature or bug founded.
 
 ## To-do
- - [ ] Loop, now playing, remove_from_position, commands
+ - [ ] Loop commands
+ - [ ] Now playing command
+ - [ ] remove_from_position command
+ - [ ] current_tracks command
  - [ ] Show what track is playing from events 
  - [ ] lyrics support
 
