@@ -18,14 +18,18 @@ pub async fn remove_from_position(ctx: Context<'_>, position: usize) -> CommandR
 
     println!("{:?}", &queue);
 
-    if let Some(song) = queue.get(position) {
+    if let Some(song) = queue.get(position - 1) {
         player.set_queue(lavalink_rs::player_context::QueueMessage::Remove(
             position - 1,
         ))?;
-        ctx.say(format!("removed {}", song.track.info.title))
-            .await?;
+        ctx.say(format!(
+            "Removed {} by {}",
+            song.track.info.title, song.track.info.author
+        ))
+        .await?;
     } else {
-        ctx.say("You can't remove invalided positions").await?;
+        ctx.send(|embed| embed.content("You can't remove tracks from invalided positions"))
+            .await?;
     }
 
     return Ok(());
