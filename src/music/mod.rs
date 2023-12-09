@@ -2,6 +2,7 @@ pub mod leave;
 pub mod r#loop;
 pub mod now_playing;
 pub mod play;
+pub mod remove_position;
 pub mod resume;
 pub mod skip;
 pub mod stop;

@@ -7,6 +7,7 @@ use music::{
     now_playing::now_playing,
     play::play,
     r#loop::{disable_loop, enable_loop},
+    remove_position::remove_from_position,
     resume::resume,
     skip::skip,
     stop::stop,
@@ -36,6 +37,7 @@ async fn main() {
                 now_playing(),
                 enable_loop(),
                 disable_loop(),
+                remove_from_position(),
             ],
             ..Default::default()
         })
