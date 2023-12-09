@@ -8,7 +8,7 @@ pub async fn enable_loop(ctx: Context<'_>) -> CommandResult {
         .get_player_context(ctx.guild_id().unwrap())
         .unwrap();
     let track_data = player_context.get_player().await.unwrap().track.unwrap();
-    lava_client.user_data.write().insert::<Track>(Track {
+    player_context.user_data.write().insert::<Track>(Track {
         enable_loop: true,
         track_data: Some(track_data),
     });
@@ -26,7 +26,7 @@ pub async fn disable_loop(ctx: Context<'_>) -> CommandResult {
         .get_player_context(ctx.guild_id().unwrap())
         .unwrap();
     let track_data = player_context.get_player().await.unwrap().track.unwrap();
-    lava_client.user_data.write().insert::<Track>(Track {
+    player_context.user_data.write().insert::<Track>(Track {
         enable_loop: false,
         track_data: Some(track_data),
     });
