@@ -9,6 +9,7 @@ use crate::{
 pub async fn play(ctx: Context<'_>, name: String) -> CommandResult {
     let guild_id = ctx.guild_id().unwrap();
     let lava_client = ctx.data().lavalink.clone();
+
     join_bot_vc(&ctx).await?;
 
     let Some(player) = lava_client.get_player_context(guild_id) else {
@@ -21,7 +22,7 @@ pub async fn play(ctx: Context<'_>, name: String) -> CommandResult {
 
     let loaded_tracks = lava_client.load_tracks(guild_id, &query).await?;
 
-    let total_tracks = player.get_queue().await.unwrap().len() + 2;
+    let total_tracks = player.get_queue().await.unwrap().len() + 1;
 
     let tracks: TrackInQueue = match loaded_tracks.data {
         Some(TrackLoadData::Track(x)) => x.into(),
@@ -36,16 +37,29 @@ pub async fn play(ctx: Context<'_>, name: String) -> CommandResult {
 
     let track_info = &tracks.track.info;
 
-    ctx.send(|message| {
-        message
-            .content(format!(
-                "Added to queue: {} - {} with position #{}",
-                track_info.author, track_info.title, total_tracks
-            ))
-            .ephemeral(true)
-            .reply(false)
-    })
-    .await?;
+    if player.get_player().await.unwrap().track.is_none() {
+        ctx.send(|message| {
+            message
+                .content(format!(
+                    "Playing {} - {}",
+                    track_info.author, track_info.title
+                ))
+                .ephemeral(true)
+                .reply(false)
+        })
+        .await?;
+    } else {
+        ctx.send(|message| {
+            message
+                .content(format!(
+                    "Added to queue {} - {} with position #{}",
+                    track_info.author, track_info.title, total_tracks
+                ))
+                .ephemeral(true)
+                .reply(false)
+        })
+        .await?;
+    }
 
     if player.get_player().await.unwrap().track.is_none() {
         player.skip()?;
