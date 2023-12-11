@@ -53,7 +53,6 @@
             rust-analyzer
             rustfmt
             libopus
-            rustToolchain
           ]) ++ pkgs.lib.optionals pkgs.stdenv.isDarwin (with pkgs; [ libiconv ]);
         };
       });

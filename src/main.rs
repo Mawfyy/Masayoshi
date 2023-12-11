@@ -26,6 +26,11 @@ use tokio::sync::Mutex;
 #[tokio::main]
 async fn main() {
     let lavalink_password = var("LAVALINK_PASSWORD").expect("missing LAVALINK_PASSWORD value");
+    let lavalink_host = format!(
+        "{}:{}",
+        var("LAVALINK_SERVER_IP").expect("missing LAVALINK_SERVER_IP value"),
+        var("LAVALINK_PORT").expect("missing LAVALINK_PORT value")
+    );
     let framework = Framework::builder()
         .options(FrameworkOptions {
             commands: vec![
@@ -57,7 +62,7 @@ async fn main() {
                 ctx.online().await;
 
                 let node_local = NodeBuilder {
-                    hostname: "localhost:2333".to_string(),
+                    hostname: lavalink_host,
                     is_ssl: false,
                     events: events::Events::default(),
                     password: lavalink_password.to_string(),
