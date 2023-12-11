@@ -71,9 +71,9 @@ pub async fn play(ctx: Context<'_>, name: String) -> CommandResult {
 fn get_query(track: String) -> String {
     if track.starts_with("http") {
         track
-    } else if track.starts_with("https://open.spotify") {
-        SearchEngines::Spotify.to_query(&track).unwrap()
-    } else {
+    } else if track.starts_with("https://www.youtube") {
         SearchEngines::YouTube.to_query(&track).unwrap()
+    } else {
+        SearchEngines::Spotify.to_query(&track).unwrap()
     }
 }
