@@ -1,5 +1,5 @@
-# Mistik-bot
-Mistik-bot is a discord music bot written in Rust for making a great experience within Discord servers.
+# Masayoshi
+Masayoshi is a discord music bot written in Rust for making a great experience within Discord servers.
 
 
 ## How to get started
@@ -9,6 +9,8 @@ Later, set up the enviroment variables, look .env.example
 DISCORD_TOKEN for discord bot token
 
 LAVALINK_PASSWORD is the same password when you configure Lavalink server.
+LAVALINK_PORT is lavalink server port
+LAVALINK_SERVER_IP is lavalink ip defined
 
 ## Contribute
 Pull requests are welcome, please open an issue if you wanna talk about a new feature or bug founded.
@@ -16,8 +18,8 @@ Pull requests are welcome, please open an issue if you wanna talk about a new fe
 ## To-do
  - [x] Loop commands
  - [x] Now playing command
- - [ ] remove_from_position command
- - [ ] current_tracks command 
+ - [x] remove_from_position command
+ - [x] current_tracks command 
  - [ ] lyrics support
 
 ## License
