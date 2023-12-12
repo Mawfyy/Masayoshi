@@ -25,6 +25,8 @@ use tokio::sync::Mutex;
 
 #[tokio::main]
 async fn main() {
+    tracing_subscriber::fmt::init();
+
     let lavalink_password = var("LAVALINK_PASSWORD").expect("missing LAVALINK_PASSWORD value");
     let lavalink_host = format!(
         "{}:{}",

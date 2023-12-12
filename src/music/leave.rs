@@ -3,7 +3,7 @@ use crate::types::{CommandResult, Context};
 #[poise::command(slash_command)]
 pub async fn leave(ctx: Context<'_>) -> CommandResult {
     let guild_id = ctx.guild_id().unwrap();
-    let manager = songbird::get(&ctx.serenity_context()).await.unwrap();
+    let manager = songbird::get(ctx.serenity_context()).await.unwrap();
     let handler = manager.get(guild_id);
     let lava_client = ctx.data().lavalink.clone();
 

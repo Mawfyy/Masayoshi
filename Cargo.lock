@@ -965,6 +965,8 @@ dependencies = [
  "poise",
  "songbird",
  "tokio",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]

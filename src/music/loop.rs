@@ -1,4 +1,4 @@
-use crate::types::{CommandResult, Context, Data, Track};
+use crate::types::{CommandResult, Context, Track};
 
 #[poise::command(slash_command)]
 pub async fn enable_loop(ctx: Context<'_>) -> CommandResult {
@@ -13,9 +13,6 @@ pub async fn enable_loop(ctx: Context<'_>) -> CommandResult {
         track_data: Some(track_data),
     });
     ctx.say("Enabled").await?;
-    if let Some(track) = lava_client.user_data.read().get::<Track>() {
-        println!("{}", track.enable_loop);
-    }
     Ok(())
 }
 
@@ -31,10 +28,6 @@ pub async fn disable_loop(ctx: Context<'_>) -> CommandResult {
         track_data: Some(track_data),
     });
     ctx.say("Disabled!").await?;
-
-    if let Some(track) = lava_client.user_data.read().get::<Track>() {
-        println!("{}", track.enable_loop);
-    }
 
     Ok(())
 }

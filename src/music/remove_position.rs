@@ -32,5 +32,5 @@ pub async fn remove_from_position(ctx: Context<'_>, position: usize) -> CommandR
             .await?;
     }
 
-    return Ok(());
+    Ok(())
 }

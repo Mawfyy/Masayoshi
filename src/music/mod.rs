@@ -13,7 +13,7 @@ pub async fn join_bot_vc(ctx: &Context<'_>) -> CommandResult {
     let lava_client = ctx.data().lavalink.clone();
     let guild = ctx.guild().unwrap();
     let player_context = lava_client.get_player_context(guild.id);
-    let manager = songbird::get(&ctx.serenity_context()).await.unwrap();
+    let manager = songbird::get(ctx.serenity_context()).await.unwrap();
 
     if player_context.is_none() {
         let channel_id = guild.voice_states.get(&ctx.author().id);

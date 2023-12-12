@@ -10,7 +10,8 @@ poise = "0.5.7"
 futures = "0.3"
 dotenvy = "0.15.7"
 tokio = {version = "1", features = ["full"]}
-
+tracing = "0.1.40"
+tracing-subscriber = "0.3"
 
 [dependencies.lavalink-rs]
 version = "0.10.0-beta"
