@@ -1,5 +1,5 @@
 # Masayoshi
-Masayoshi is a discord music bot written in Rust for making a great experience within Discord servers.
+Masayoshi is a discord music bot written in Rust for making a great experience within Discord servers with support to Youtube, SoundCloud, Spotify, Deezer.
 
 
 ## How to get started
