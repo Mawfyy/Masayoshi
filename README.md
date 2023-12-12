@@ -4,13 +4,8 @@ Masayoshi is a discord music bot written in Rust for making a great experience w
 
 ## How to get started
 First you need to download Lavalink-jar from [Lavalink](https://github.com/lavalink-devs/Lavalink) repository and configurate it.
-Later, set up the enviroment variables, look .env.example
+Later, set up the enviroment variables in .env.example after set, rename .env.example to .env.
 
-DISCORD_TOKEN for discord bot token
-
-LAVALINK_PASSWORD is the same password when you configure Lavalink server.
-LAVALINK_PORT is lavalink server port
-LAVALINK_SERVER_IP is lavalink ip defined
 
 ## Contribute
 Pull requests are welcome, please open an issue if you wanna talk about a new feature or bug founded.
