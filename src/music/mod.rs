@@ -1,16 +1,19 @@
-use dotenvy::var;
-use lavalink_rs::{
-    player_context,
-    prelude::{QueueMessage, SearchEngines, TrackInQueue, TrackLoadData},
-};
+pub mod leave;
+pub mod r#loop;
+pub mod now_playing;
+pub mod play;
+pub mod remove_position;
+pub mod resume;
+pub mod skip;
+pub mod stop;
 
-use crate::types::{Context, Error};
+use crate::types::{CommandResult, Context};
 
-pub async fn join_bot(ctx: &Context<'_>) -> Result<(), Error> {
+pub async fn join_bot_vc(ctx: &Context<'_>) -> CommandResult {
     let lava_client = ctx.data().lavalink.clone();
     let guild = ctx.guild().unwrap();
     let player_context = lava_client.get_player_context(guild.id);
-    let manager = songbird::get(&ctx.serenity_context()).await.unwrap();
+    let manager = songbird::get(ctx.serenity_context()).await.unwrap();
 
     if player_context.is_none() {
         let channel_id = guild.voice_states.get(&ctx.author().id);
@@ -41,143 +44,5 @@ pub async fn join_bot(ctx: &Context<'_>) -> Result<(), Error> {
         }
     }
 
-    Ok(())
-}
-
-#[poise::command(slash_command)]
-pub async fn play(ctx: Context<'_>, name: String) -> Result<(), Error> {
-    let guild = ctx.guild().unwrap();
-    let guild_id = guild.id;
-    let lava_client = ctx.data().lavalink.clone();
-    join_bot(&ctx).await?;
-
-    let player_context = lava_client.get_player_context(guild_id);
-
-    let Some(player) = player_context else {
-        ctx.say("The bot needs to join first in the voice channel")
-            .await?;
-        return Ok(());
-    };
-
-    let query = if name.starts_with("http") {
-        name
-    } else if name.starts_with("https://open.spotify") {
-        SearchEngines::Spotify.to_query(&name)?
-    } else {
-        SearchEngines::YouTube.to_query(&name)?
-    };
-
-    let loaded_tracks = lava_client.load_tracks(guild_id, &query).await?;
-
-    let mut playlist_info = None;
-
-    let tracks: Vec<TrackInQueue> = match loaded_tracks.data {
-        Some(TrackLoadData::Track(x)) => vec![x.into()],
-        Some(TrackLoadData::Search(x)) => vec![x[0].clone().into()],
-        Some(TrackLoadData::Playlist(x)) => {
-            playlist_info = Some(x.info);
-            x.tracks.iter().map(|x| x.into()).collect()
-        }
-        _ => return Ok(()),
-    };
-
-    player.set_queue(QueueMessage::Append(tracks.clone().into()))?;
-
-    println!("{}", player.get_queue().await.unwrap().len());
-
-    if let Some(info) = playlist_info {
-        ctx.say(format!(
-            "Added playlist {}  with {} tracks",
-            info.name,
-            tracks.len()
-        ))
-        .await?;
-    } else {
-        let track = &tracks[0].track;
-        ctx.say(format!(
-            "Added to queue: {} - {} with position #{}",
-            track.info.author,
-            track.info.title,
-            player.get_queue().await.unwrap().len() + 1
-        ))
-        .await?;
-    }
-    Ok(())
-}
-
-#[poise::command(slash_command)]
-pub async fn leave(ctx: Context<'_>) -> Result<(), Error> {
-    let guild = ctx.guild().unwrap();
-    let guild_id = guild.id;
-    let manager = songbird::get(&ctx.serenity_context()).await.unwrap();
-    let handler = manager.get(guild_id);
-    let lava_client = ctx.data().lavalink.clone();
-
-    match handler {
-        Some(voice_handler) => {
-            let mut voice_handler_lock = voice_handler.lock().await;
-            voice_handler_lock.leave().await?;
-            lava_client.delete_player(guild_id).await?;
-            ctx.say("Disconnected!").await?;
-        }
-
-        None => {
-            ctx.say("The bot isn't connected to some channel").await?;
-        }
-    }
-
-    Ok(())
-}
-
-#[poise::command(slash_command)]
-pub async fn skip(ctx: Context<'_>) -> Result<(), Error> {
-    let guild_id = ctx.guild_id().unwrap();
-    let player_context = ctx.data().lavalink.clone().get_player_context(guild_id);
-    let queue = player_context.clone().unwrap().get_queue().await.unwrap();
-
-    let Some(player) = player_context else {
-        ctx.say("The bot ins't joined!!").await?;
-        return Ok(());
-    };
-
-    if queue.is_empty() {
-        ctx.say("You can't skip if there isn't songs yet").await?;
-    } else {
-        player.skip()?;
-        ctx.say("Skipped!!").await?;
-    }
-
-    Ok(())
-}
-
-#[poise::command(slash_command)]
-pub async fn stop(ctx: Context<'_>) -> Result<(), Error> {
-    let guild_id = ctx.guild_id().unwrap();
-    let lava_client = ctx.data().lavalink.clone();
-    let player_context = lava_client.get_player_context(guild_id);
-
-    if player_context.is_none() {
-        ctx.say("There isn't song to skip").await?;
-        return Ok(());
-    }
-
-    player_context.unwrap().set_pause(true).await?;
-    ctx.say("Stopped!!").await?;
-    Ok(())
-}
-
-#[poise::command(slash_command)]
-pub async fn resume(ctx: Context<'_>) -> Result<(), Error> {
-    let guild_id = ctx.guild_id().unwrap();
-    let lava_client = ctx.data().lavalink.clone();
-    let player_context = lava_client.get_player_context(guild_id);
-
-    if player_context.is_none() {
-        ctx.say("There isn't song to skip").await?;
-        return Ok(());
-    }
-
-    player_context.unwrap().set_pause(false).await?;
-    ctx.say("Now playing!!").await?;
     Ok(())
 }

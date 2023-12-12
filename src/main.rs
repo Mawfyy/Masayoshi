@@ -2,13 +2,22 @@ mod music;
 mod music_events;
 mod types;
 
+use music::{
+    leave::leave,
+    now_playing::now_playing,
+    play::play,
+    r#loop::{disable_loop, enable_loop},
+    remove_position::remove_from_position,
+    resume::resume,
+    skip::skip,
+    stop::stop,
+};
 use std::sync::Arc;
 
 use crate::types::Data;
 use dotenvy::var;
 use lavalink_rs::{model::events, prelude::*};
-use music::{leave, play, resume, skip, stop};
-use music_events::{ready_event, track_start};
+use music_events::{ready_event, track_end, track_start};
 use poise::serenity_prelude::GatewayIntents;
 use poise::{Framework, FrameworkOptions};
 use songbird::SerenityInit;
@@ -16,10 +25,27 @@ use tokio::sync::Mutex;
 
 #[tokio::main]
 async fn main() {
+    tracing_subscriber::fmt::init();
+
     let lavalink_password = var("LAVALINK_PASSWORD").expect("missing LAVALINK_PASSWORD value");
+    let lavalink_host = format!(
+        "{}:{}",
+        var("LAVALINK_SERVER_IP").expect("missing LAVALINK_SERVER_IP value"),
+        var("LAVALINK_PORT").expect("missing LAVALINK_PORT value")
+    );
     let framework = Framework::builder()
         .options(FrameworkOptions {
-            commands: vec![play(), leave(), skip(), resume(), stop()],
+            commands: vec![
+                play(),
+                leave(),
+                skip(),
+                resume(),
+                stop(),
+                now_playing(),
+                enable_loop(),
+                disable_loop(),
+                remove_from_position(),
+            ],
             ..Default::default()
         })
         .token(var("DISCORD_TOKEN").expect("missing DISCORD_TOKEN value"))
@@ -31,13 +57,14 @@ async fn main() {
                 let events = events::Events {
                     ready: Some(ready_event),
                     track_start: Some(track_start),
+                    track_end: Some(track_end),
                     ..Default::default()
                 };
 
                 ctx.online().await;
 
                 let node_local = NodeBuilder {
-                    hostname: "localhost:2333".to_string(),
+                    hostname: lavalink_host,
                     is_ssl: false,
                     events: events::Events::default(),
                     password: lavalink_password.to_string(),
