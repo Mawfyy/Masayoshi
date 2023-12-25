@@ -17,7 +17,6 @@ Pull requests are welcome, please open an issue if you wanna talk about a new fe
 
 ## Features
  - Loop, Stop, Play, Resume, Now playing, Skip, Remove song commands!!
- - Youtube, Spotify, SoundCloud support!!
 
 ## License
 This project is licensed under the [MIT license](https://choosealicense.com/licenses/mit/). Feel free to use and modify it according to your needs.
